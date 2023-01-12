@@ -1,0 +1,8 @@
+{
+    "image": "furrysalamander/icarus:latest",
+    "customizations": {
+        "vscode": {
+            "extensions": ["mshr-h.veriloghdl"]
+        }
+    }
+}
