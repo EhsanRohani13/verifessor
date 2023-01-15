@@ -1,8 +1,14 @@
 {
-    "image": "furrysalamander/icarus:latest",
+    // "image": "icarus:latest",
+    "build": { "dockerfile": "Dockerfile" },
+
     "customizations": {
         "vscode": {
-            "extensions": ["mshr-h.veriloghdl"]
+            "extensions": [
+                "mshr-h.veriloghdl",
+                "ms-python.python"
+        ]
         }
-    }
+    },
+    "postStartCommand": "http-server -c-1 /root/vcdrom/node_modules/vcdrom/app/"
 }

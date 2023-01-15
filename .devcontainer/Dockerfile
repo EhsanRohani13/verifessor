@@ -9,5 +9,11 @@ FROM alpine:latest as icarus-build
 
 FROM alpine:latest AS run
 RUN apk add --no-cache iverilog --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add --no-cache npm git make
+WORKDIR /root/vcdrom
+RUN npm i vcdrom
+WORKDIR /root
+RUN npm install http-server -g
+RUN apk add --no-cache python3
 
 # COPY --from=icarus-build /build* /usr/local/
