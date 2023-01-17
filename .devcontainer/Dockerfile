@@ -8,7 +8,7 @@ FROM alpine:latest as icarus-build
 # RUN make install
 
 FROM alpine:latest AS run
-RUN apk add --no-cache iverilog --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+RUN apk add --no-cache iverilog --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/
 RUN apk add --no-cache npm git make
 WORKDIR /root/vcdrom
 RUN npm i vcdrom
