@@ -5,9 +5,10 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "mshr-h.veriloghdl",
-                "ms-python.python"
-        ]
+				"mshr-h.veriloghdl",
+				"ms-python.python",
+				"cschleiden.vscode-github-actions"
+			]
         }
     },
     "postStartCommand": "http-server -c-1 /root/vcdrom/node_modules/vcdrom/app/"

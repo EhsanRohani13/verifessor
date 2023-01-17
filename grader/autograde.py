@@ -28,9 +28,10 @@ CSV_KEYS = [
 ]
 
 # Code for report header
-# f.write("# Homework Results\n\n")
-# current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-# f.write(f"### Generated on {current_time}\n\n")
+def generate_report_header(f: TextIOWrapper):
+    f.write("# Homework Results\n\n")
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    f.write(f"### Generated on {current_time}\n\n")
 
 class TestResult:
     def __init__(self, number, score, max_score, error_message, description):
@@ -61,7 +62,7 @@ class Project:
         self.vcd_urls = vcd_urls
 
 
-def generate_problem_summary_table(f, test_results):
+def generate_problem_summary_table(f: TextIOWrapper, test_results):
     def generate_problem_summary_row(f, test_result):
         percent_score = (test_result.score / test_result.max_score) * 100
         success_symbol = "🟢" if test_result.score == test_result.max_score else "🔴"
@@ -73,22 +74,21 @@ def generate_problem_summary_table(f, test_results):
         generate_problem_summary_row(f, test_result)
 
 
-def generate_reports(test_results: list[TestResult], project_directory, vcds):
+def generate_reports(f: TextIOWrapper, test_results: list[TestResult], project_directory, vcds):
     if test_results is None:
         return
     project_name = path.basename(path.normpath(project_directory))
-    with open(REPORT_FILE, "w") as f:
-        f.write(f"# Project: {project_name}\n\n")
-        generate_problem_summary_table(f, test_results)
-        for vcd in vcds:
-            f.write(f"{vcd}\n\n")
-
+    f.write(f"## Project: {project_name}\n\n")
+    generate_problem_summary_table(f, test_results)
+    for vcd in vcds:
+        f.write(f"{vcd}\n\n")
 
 
 def build_binary(make_directory, output_directory: str):
     with set_directory(make_directory) as _:
         results = subprocess.run('make', capture_output=True)
         if results.returncode != 0:
+            print(results.stderr.decode())
             return False
         move(OUTPUT_EXECUTABLE, output_directory)
         return True
@@ -136,7 +136,7 @@ def grade(project_path) -> list[TestResult]:
             with set_directory(working_dir) as _:
                 results = run_tests()
                 vcds = copy_vcds(vcd_directory)
-                return parse_results(results), vcds
+                return parse_results(results), vcds            
             
 
 def generate_project_list(directory: str) -> list[str]:
@@ -145,11 +145,14 @@ def generate_project_list(directory: str) -> list[str]:
 def main():
     project_paths = generate_project_list(PROJECTS_DIR)
     
-    for project_path in project_paths:
-        results = grade(project_path)
-        if results is not None:
-            test_results, vcds = results
-            generate_reports(test_results, project_path, vcds)
+    with open(REPORT_FILE, "w") as f:
+        generate_report_header(f)
+        for project_path in project_paths:
+            results = grade(project_path)
+            # print(project_path, results)
+            if results is not None:
+                test_results, vcds = results
+                generate_reports(f, test_results, project_path, vcds)
 
 if __name__=="__main__":
     main()
