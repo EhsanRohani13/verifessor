@@ -4,6 +4,7 @@ on: [workflow_dispatch]
 
 jobs:
   build:
+    runs-on: ubuntu-latest
     container:
       image: furrysalamander/icarus:latest
     steps:
