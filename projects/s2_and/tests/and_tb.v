@@ -8,7 +8,6 @@ initial begin
     b = 1;
     #1;
     $display("1,%d,2", ((a & b) == y) * 2);
-    #1;
     a = 0;
     b = 1;
     #1;
@@ -17,7 +16,6 @@ initial begin
     b = 0;
     #1;
     $display("3,%d,2", ((a & b) == y) * 2);
-    #1;
     a = 0;
     b = 0;
     #1;
